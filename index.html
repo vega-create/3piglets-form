@@ -374,8 +374,8 @@
         </form>
     </div>
     
-    <script>
-    // Zapier Webhook URL - Already configured with your URL
+ <script>
+    // Zapier Webhook URL - 確保這是您的 Webhook URL
     const ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/25326444/u83g9a3/silent';
     
     // File handling
@@ -425,13 +425,12 @@
         
         const formData = new FormData(this);
         
-        // Parse name for ServiceM8
+        // Prepare data (略過解析姓名的部分，與之前一致)
         const fullName = formData.get('fullName');
         const nameParts = fullName.split(' ');
         const firstName = nameParts[0];
         const lastName = nameParts.slice(1).join(' ') || '';
         
-        // Prepare data for Zapier/ServiceM8
         const zapierData = {
             business_name: formData.get('businessName') || fullName,
             first_name: firstName,
@@ -462,43 +461,40 @@
                 });
             }
             
-            // Submit to Zapier
+            // *** 核心修正：重新加入 mode: 'no-cors' ***
             const response = await fetch(ZAPIER_WEBHOOK_URL, {
                 method: 'POST',
-                // *** 核心修正：移除 mode: 'no-cors' ***
+                mode: 'no-cors', // 重新啟用 no-cors 模式以避免 CORS 阻擋
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(zapierData)
             });
             
-            // 由於移除了 no-cors，現在可以正確檢查 response.ok
-            if (response.ok) { 
-                alertSuccess.classList.add('show');
-                
-                // GTM conversion tracking
-                if (typeof dataLayer !== 'undefined') {
-                    dataLayer.push({
-                        'event': 'conversion',
-                        'conversion_type': 'form_submit_success'
-                    });
-                }
-                
-                this.reset();
-                attachedFiles = [];
-                displayFiles();
-                
-                // 成功後延遲導向
-                setTimeout(() => {
-                    window.location.href = 'thank-you.html';
-                }, 2000);
-            } else {
-                // 如果 Zapier 傳回 4xx 或 5xx 錯誤，會在這裡被捕獲
-                throw new Error('Server submission failed with status: ' + response.status);
+            // *** 修正後的成功邏輯：因為是 no-cors，我們假設 fetch 成功執行到這裡，資料就已送出 ***
+            alertSuccess.classList.add('show');
+            
+            // GTM conversion tracking
+            if (typeof dataLayer !== 'undefined') {
+                dataLayer.push({
+                    'event': 'conversion',
+                    'conversion_type': 'form_submit_success'
+                });
             }
             
+            this.reset();
+            attachedFiles = [];
+            displayFiles();
+            
+            // 成功後延遲導向
+            setTimeout(() => {
+                // 請確認 'thank-you.html' 文件存在
+                window.location.href = 'thank-you.html'; 
+            }, 2000);
+            
         } catch (error) {
-            console.error('Submission error:', error);
+            // 只有在發生網路層級（連線中斷、DNS 失敗等）的錯誤時才會執行
+            console.error('Submission error (Network Level):', error);
             alertError.classList.add('show');
             
             if (typeof dataLayer !== 'undefined') {
@@ -514,7 +510,7 @@
         }
     });
     
-    // Track form interactions
+    // Track form interactions (與之前一致)
     let formStarted = false;
     document.querySelectorAll('.form-control').forEach(input => {
         input.addEventListener('focus', function() {
