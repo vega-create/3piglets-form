@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3 Piglets Cleaning - Request a Booking or Quote</title>
+    
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-PDV6PZMX');</script>
+    <!-- End Google Tag Manager -->
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .logo-container {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .subtitle {
+            color: #6c757d;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        
+        .form-container {
+            padding: 30px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 30px 0 20px;
+        }
+        
+        .section-title:first-child {
+            margin-top: 0;
+        }
+        
+        .section-subtitle {
+            color: #495057;
+            font-size: 15px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #ffffff;
+            font-family: inherit;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #755E8C;
+            box-shadow: 0 0 0 3px rgba(117, 94, 140, 0.1);
+        }
+        
+        .form-control::placeholder {
+            color: #adb5bd;
+        }
+        
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+        
+        .attach-btn {
+            width: auto;
+            padding: 12px 24px;
+            background: white;
+            color: #755E8C;
+            border: 1px solid #755E8C;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .attach-btn:hover {
+            background: #755E8C;
+            color: white;
+        }
+        
+        .file-input-hidden {
+            display: none;
+        }
+        
+        .file-list {
+            margin-top: 12px;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        
+        .file-name {
+            flex: 1;
+            font-size: 14px;
+            color: #495057;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .file-remove {
+            color: #dc3545;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+            padding: 0 5px;
+        }
+        
+        .file-remove:hover {
+            color: #c82333;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: #755E8C;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+        }
+        
+        .submit-btn:hover {
+            background: #5d4a6d;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(117, 94, 140, 0.3);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        
+        .submit-btn.loading {
+            background: #9b8aa8;
+            pointer-events: none;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .alert.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .help-text {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 0;
+                box-shadow: none;
+            }
+            
+            body {
+                padding: 0;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .header {
+                padding: 25px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PDV6PZMX"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    
+    <div class="container">
+        <div class="header">
+            <div class="logo-container">
+                <img src="logo.png" alt="3 Piglets Cleaning" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEwMCIgcj0iOTAiIGZpbGw9IiM3NTVFOEMiLz4KPHRleHQgeD0iMTAwIiB5PSI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iNDAiPvCfkLc8L3RleHQ+Cjx0ZXh0IHg9IjEwMCIgeT0iMTIwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIxOCIgZm9udC13ZWlnaHQ9ImJvbGQiPjMgUElHTEVUUzwvdGV4dD4KPHRleHQgeD0iMTAwIiB5PSIxNDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIiBmb250LXNpemU9IjE2Ij5DTEVBTklORzwvdGV4dD4KPC9zdmc+'">
+            </div>
+            <h1>Request a booking or quote</h1>
+            <p class="subtitle">Simply fill out the details below and we will be in contact with you as soon as we can.</p>
+        </div>
+        
+        <form id="contactForm" class="form-container">
+            <div id="alertSuccess" class="alert alert-success">
+                ✅ Your request has been submitted successfully! We'll contact you soon.
+            </div>
+            
+            <div id="alertError" class="alert alert-error">
+                ❌ There was an error. Please try again or call us directly.
+            </div>
+            
+            <h2 class="section-title">Contact information</h2>
+            
+            <div class="form-group">
+                <input type="text" 
+                       class="form-control" 
+                       id="businessName" 
+                       name="businessName" 
+                       placeholder="Business name (optional)">
+            </div>
+            
+            <div class="form-group">
+                <input type="text" 
+                       class="form-control" 
+                       id="fullName" 
+                       name="fullName" 
+                       placeholder="First & last name" 
+                       required>
+            </div>
+            
+            <div class="form-group">
+                <input type="email" 
+                       class="form-control" 
+                       id="email" 
+                       name="email" 
+                       placeholder="Email address" 
+                       required>
+            </div>
+            
+            <div class="form-group">
+                <input type="tel" 
+                       class="form-control" 
+                       id="phone" 
+                       name="phone" 
+                       placeholder="Phone number (home or mobile)" 
+                       required>
+            </div>
+            
+            <div class="form-group">
+                <input type="text" 
+                       class="form-control" 
+                       id="address" 
+                       name="address" 
+                       placeholder="Your address" 
+                       required>
+            </div>
+            
+            <h2 class="section-title">Please provide some details</h2>
+            <p class="section-subtitle">How can we help?</p>
+            
+            <div class="form-group">
+                <textarea class="form-control" 
+                          id="description" 
+                          name="description" 
+                          placeholder="Enter a description of the work you would like done" 
+                          required></textarea>
+            </div>
+            
+            <h2 class="section-title">Attachments</h2>
+            <p class="help-text">Please attach photos or documents that will help describe your job.</p>
+            
+            <div class="form-group">
+                <input type="file" 
+                       id="fileInput" 
+                       class="file-input-hidden" 
+                       multiple 
+                       accept="image/*,.pdf,.doc,.docx">
+                <button type="button" 
+                        class="attach-btn" 
+                        onclick="document.getElementById('fileInput').click()">
+                    Attach
+                </button>
+                <div id="fileList" class="file-list"></div>
+            </div>
+            
+            <button type="submit" class="submit-btn" id="submitBtn">Submit</button>
+        </form>
+    </div>
+    
+    <script>
+        // Zapier Webhook URL - Already configured with your URL
+        const ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/25326444/u83g9a3/';
+        
+        // File handling
+        let attachedFiles = [];
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        
+        fileInput.addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            files.forEach(file => {
+                if (!attachedFiles.find(f => f.name === file.name)) {
+                    attachedFiles.push(file);
+                    displayFiles();
+                }
+            });
+            this.value = '';
+        });
+        
+        function displayFiles() {
+            fileList.innerHTML = '';
+            attachedFiles.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <span class="file-name">${file.name}</span>
+                    <span class="file-remove" onclick="removeFile(${index})">×</span>
+                `;
+                fileList.appendChild(fileItem);
+            });
+        }
+        
+        function removeFile(index) {
+            attachedFiles.splice(index, 1);
+            displayFiles();
+        }
+        
+        // Form submission handler
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const alertSuccess = document.getElementById('alertSuccess');
+            const alertError = document.getElementById('alertError');
+            
+            alertSuccess.classList.remove('show');
+            alertError.classList.remove('show');
+            
+            const formData = new FormData(this);
+            
+            // Parse name for ServiceM8
+            const fullName = formData.get('fullName');
+            const nameParts = fullName.split(' ');
+            const firstName = nameParts[0];
+            const lastName = nameParts.slice(1).join(' ') || '';
+            
+            // Prepare data for Zapier/ServiceM8
+            const zapierData = {
+                business_name: formData.get('businessName') || fullName,
+                first_name: firstName,
+                last_name: lastName,
+                email: formData.get('email'),
+                mobile: formData.get('phone'),
+                job_address: formData.get('address'),
+                job_description: formData.get('description'),
+                status: 'Quote',
+                job_type: 'Cleaning Service',
+                source: 'Website Form',
+                submitted_at: new Date().toISOString(),
+                attachment_count: attachedFiles.length,
+                attachment_names: attachedFiles.map(f => f.name).join(', ')
+            };
+            
+            submitBtn.classList.add('loading');
+            submitBtn.textContent = 'Submitting...';
+            submitBtn.disabled = true;
+            
+            try {
+                // GTM tracking
+                if (typeof dataLayer !== 'undefined') {
+                    dataLayer.push({
+                        'event': 'form_submit',
+                        'form_name': 'quote_request',
+                        'has_attachments': attachedFiles.length > 0
+                    });
+                }
+                
+                // Submit to Zapier
+                const response = await fetch(ZAPIER_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(zapierData)
+                });
+                
+                if (response.ok) {
+                    alertSuccess.classList.add('show');
+                    
+                    // GTM conversion tracking
+                    if (typeof dataLayer !== 'undefined') {
+                        dataLayer.push({
+                            'event': 'conversion',
+                            'conversion_type': 'form_submit_success'
+                        });
+                    }
+                    
+                    this.reset();
+                    attachedFiles = [];
+                    displayFiles();
+                    
+                    setTimeout(() => {
+                        window.location.href = 'thank-you.html';
+                    }, 2000);
+                } else {
+                    throw new Error('Submission failed');
+                }
+                
+            } catch (error) {
+                console.error('Submission error:', error);
+                alertError.classList.add('show');
+                
+                if (typeof dataLayer !== 'undefined') {
+                    dataLayer.push({
+                        'event': 'form_error',
+                        'error_message': error.message
+                    });
+                }
+            } finally {
+                submitBtn.classList.remove('loading');
+                submitBtn.textContent = 'Submit';
+                submitBtn.disabled = false;
+            }
+        });
+        
+        // Track form interactions
+        let formStarted = false;
+        document.querySelectorAll('.form-control').forEach(input => {
+            input.addEventListener('focus', function() {
+                if (!formStarted && typeof dataLayer !== 'undefined') {
+                    dataLayer.push({
+                        'event': 'form_start',
+                        'form_name': 'quote_request'
+                    });
+                    formStarted = true;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

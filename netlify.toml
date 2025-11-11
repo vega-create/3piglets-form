@@ -1,0 +1,23 @@
+[build]
+  publish = "."
+
+# Headers for security and performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+
+# Redirect rules (optional)
+[[redirects]]
+  from = "/quote"
+  to = "/index.html"
+  status = 301
+
+[[redirects]]
+  from = "/booking"
+  to = "/index.html"
+  status = 301
