@@ -465,6 +465,7 @@
                 // Submit to Zapier
                 const response = await fetch(ZAPIER_WEBHOOK_URL, {
                     method: 'POST',
+                    mode: 'no-cors', 
                     headers: {
                         'Content-Type': 'application/json'
                     },
