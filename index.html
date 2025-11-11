@@ -375,155 +375,158 @@
     </div>
     
     <script>
-        // Zapier Webhook URL - Already configured with your URL
-        const ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/25326444/u83g9a3/silent';
-        
-        // File handling
-        let attachedFiles = [];
-        const fileInput = document.getElementById('fileInput');
-        const fileList = document.getElementById('fileList');
-        
-        fileInput.addEventListener('change', function(e) {
-            const files = Array.from(e.target.files);
-            files.forEach(file => {
-                if (!attachedFiles.find(f => f.name === file.name)) {
-                    attachedFiles.push(file);
-                    displayFiles();
-                }
-            });
-            this.value = '';
-        });
-        
-        function displayFiles() {
-            fileList.innerHTML = '';
-            attachedFiles.forEach((file, index) => {
-                const fileItem = document.createElement('div');
-                fileItem.className = 'file-item';
-                fileItem.innerHTML = `
-                    <span class="file-name">${file.name}</span>
-                    <span class="file-remove" onclick="removeFile(${index})">×</span>
-                `;
-                fileList.appendChild(fileItem);
-            });
-        }
-        
-        function removeFile(index) {
-            attachedFiles.splice(index, 1);
-            displayFiles();
-        }
-        
-        // Form submission handler
-        document.getElementById('contactForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const submitBtn = document.getElementById('submitBtn');
-            const alertSuccess = document.getElementById('alertSuccess');
-            const alertError = document.getElementById('alertError');
-            
-            alertSuccess.classList.remove('show');
-            alertError.classList.remove('show');
-            
-            const formData = new FormData(this);
-            
-            // Parse name for ServiceM8
-            const fullName = formData.get('fullName');
-            const nameParts = fullName.split(' ');
-            const firstName = nameParts[0];
-            const lastName = nameParts.slice(1).join(' ') || '';
-            
-            // Prepare data for Zapier/ServiceM8
-            const zapierData = {
-                business_name: formData.get('businessName') || fullName,
-                first_name: firstName,
-                last_name: lastName,
-                email: formData.get('email'),
-                mobile: formData.get('phone'),
-                job_address: formData.get('address'),
-                job_description: formData.get('description'),
-                status: 'Quote',
-                job_type: 'Cleaning Service',
-                source: 'Website Form',
-                submitted_at: new Date().toISOString(),
-                attachment_count: attachedFiles.length,
-                attachment_names: attachedFiles.map(f => f.name).join(', ')
-            };
-            
-            submitBtn.classList.add('loading');
-            submitBtn.textContent = 'Submitting...';
-            submitBtn.disabled = true;
-            
-            try {
-                // GTM tracking
-                if (typeof dataLayer !== 'undefined') {
-                    dataLayer.push({
-                        'event': 'form_submit',
-                        'form_name': 'quote_request',
-                        'has_attachments': attachedFiles.length > 0
-                    });
-                }
-                
-                // Submit to Zapier
-                const response = await fetch(ZAPIER_WEBHOOK_URL, {
-                    method: 'POST',
-                    mode: 'no-cors', 
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(zapierData)
-                });
-                
-                if (response.ok) {
-                    alertSuccess.classList.add('show');
-                    
-                    // GTM conversion tracking
-                    if (typeof dataLayer !== 'undefined') {
-                        dataLayer.push({
-                            'event': 'conversion',
-                            'conversion_type': 'form_submit_success'
-                        });
-                    }
-                    
-                    this.reset();
-                    attachedFiles = [];
-                    displayFiles();
-                    
-                    setTimeout(() => {
-                        window.location.href = 'thank-you.html';
-                    }, 2000);
-                } else {
-                    throw new Error('Submission failed');
-                }
-                
-            } catch (error) {
-                console.error('Submission error:', error);
-                alertError.classList.add('show');
-                
-                if (typeof dataLayer !== 'undefined') {
-                    dataLayer.push({
-                        'event': 'form_error',
-                        'error_message': error.message
-                    });
-                }
-            } finally {
-                submitBtn.classList.remove('loading');
-                submitBtn.textContent = 'Submit';
-                submitBtn.disabled = false;
+    // Zapier Webhook URL - Already configured with your URL
+    const ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/25326444/u83g9a3/silent';
+    
+    // File handling
+    let attachedFiles = [];
+    const fileInput = document.getElementById('fileInput');
+    const fileList = document.getElementById('fileList');
+    
+    fileInput.addEventListener('change', function(e) {
+        const files = Array.from(e.target.files);
+        files.forEach(file => {
+            if (!attachedFiles.find(f => f.name === file.name)) {
+                attachedFiles.push(file);
+                displayFiles();
             }
         });
-        
-        // Track form interactions
-        let formStarted = false;
-        document.querySelectorAll('.form-control').forEach(input => {
-            input.addEventListener('focus', function() {
-                if (!formStarted && typeof dataLayer !== 'undefined') {
-                    dataLayer.push({
-                        'event': 'form_start',
-                        'form_name': 'quote_request'
-                    });
-                    formStarted = true;
-                }
-            });
+        this.value = '';
+    });
+    
+    function displayFiles() {
+        fileList.innerHTML = '';
+        attachedFiles.forEach((file, index) => {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.innerHTML = `
+                <span class="file-name">${file.name}</span>
+                <span class="file-remove" onclick="removeFile(${index})">×</span>
+            `;
+            fileList.appendChild(fileItem);
         });
-    </script>
+    }
+    
+    function removeFile(index) {
+        attachedFiles.splice(index, 1);
+        displayFiles();
+    }
+    
+    // Form submission handler
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const submitBtn = document.getElementById('submitBtn');
+        const alertSuccess = document.getElementById('alertSuccess');
+        const alertError = document.getElementById('alertError');
+        
+        alertSuccess.classList.remove('show');
+        alertError.classList.remove('show');
+        
+        const formData = new FormData(this);
+        
+        // Parse name for ServiceM8
+        const fullName = formData.get('fullName');
+        const nameParts = fullName.split(' ');
+        const firstName = nameParts[0];
+        const lastName = nameParts.slice(1).join(' ') || '';
+        
+        // Prepare data for Zapier/ServiceM8
+        const zapierData = {
+            business_name: formData.get('businessName') || fullName,
+            first_name: firstName,
+            last_name: lastName,
+            email: formData.get('email'),
+            mobile: formData.get('phone'),
+            job_address: formData.get('address'),
+            job_description: formData.get('description'),
+            status: 'Quote',
+            job_type: 'Cleaning Service',
+            source: 'Website Form',
+            submitted_at: new Date().toISOString(),
+            attachment_count: attachedFiles.length,
+            attachment_names: attachedFiles.map(f => f.name).join(', ')
+        };
+        
+        submitBtn.classList.add('loading');
+        submitBtn.textContent = 'Submitting...';
+        submitBtn.disabled = true;
+        
+        try {
+            // GTM tracking
+            if (typeof dataLayer !== 'undefined') {
+                dataLayer.push({
+                    'event': 'form_submit',
+                    'form_name': 'quote_request',
+                    'has_attachments': attachedFiles.length > 0
+                });
+            }
+            
+            // Submit to Zapier
+            const response = await fetch(ZAPIER_WEBHOOK_URL, {
+                method: 'POST',
+                // *** 核心修正：移除 mode: 'no-cors' ***
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(zapierData)
+            });
+            
+            // 由於移除了 no-cors，現在可以正確檢查 response.ok
+            if (response.ok) { 
+                alertSuccess.classList.add('show');
+                
+                // GTM conversion tracking
+                if (typeof dataLayer !== 'undefined') {
+                    dataLayer.push({
+                        'event': 'conversion',
+                        'conversion_type': 'form_submit_success'
+                    });
+                }
+                
+                this.reset();
+                attachedFiles = [];
+                displayFiles();
+                
+                // 成功後延遲導向
+                setTimeout(() => {
+                    window.location.href = 'thank-you.html';
+                }, 2000);
+            } else {
+                // 如果 Zapier 傳回 4xx 或 5xx 錯誤，會在這裡被捕獲
+                throw new Error('Server submission failed with status: ' + response.status);
+            }
+            
+        } catch (error) {
+            console.error('Submission error:', error);
+            alertError.classList.add('show');
+            
+            if (typeof dataLayer !== 'undefined') {
+                dataLayer.push({
+                    'event': 'form_error',
+                    'error_message': error.message
+                });
+            }
+        } finally {
+            submitBtn.classList.remove('loading');
+            submitBtn.textContent = 'Submit';
+            submitBtn.disabled = false;
+        }
+    });
+    
+    // Track form interactions
+    let formStarted = false;
+    document.querySelectorAll('.form-control').forEach(input => {
+        input.addEventListener('focus', function() {
+            if (!formStarted && typeof dataLayer !== 'undefined') {
+                dataLayer.push({
+                    'event': 'form_start',
+                    'form_name': 'quote_request'
+                });
+                formStarted = true;
+            }
+        });
+    });
+</script>
 </body>
 </html>
